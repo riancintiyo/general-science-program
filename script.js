@@ -2,9 +2,12 @@
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-});
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        const isExpanded = navMenu.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', isExpanded);
+    });
+}
 
 // Close mobile menu when clicking a nav link
 document.querySelectorAll('.nav-menu a').forEach(link => {
@@ -52,7 +55,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const navbar = document.querySelector('.navbar');
 let lastScroll = 0;
 
-window.addEventListener('scroll', () => {
+if (navbar) {
+    window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
     
     if (currentScroll > 100) {
@@ -63,31 +67,41 @@ window.addEventListener('scroll', () => {
         navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
     }
     
-    lastScroll = currentScroll;
-});
+        lastScroll = currentScroll;
+    });
+}
 
 // Contact Form Submission
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        message: document.getElementById('message').value
-    };
-    
-    // In a real application, you would send this data to a server
-    console.log('Form submitted:', formData);
-    
-    // Show success message
-    alert('Thank you for your message! We will get back to you soon.');
-    
-    // Reset form
-    contactForm.reset();
-});
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            message: document.getElementById('message').value
+        };
+        
+        // In a real application, you would send this data to a server
+        console.log('Form submitted:', formData);
+        
+        // Show success message with custom notification
+        const successMsg = document.createElement('div');
+        successMsg.textContent = 'Thank you for your message! We will get back to you soon.';
+        successMsg.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #50C878; color: white; padding: 1rem 2rem; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 10000;';
+        document.body.appendChild(successMsg);
+        
+        setTimeout(() => {
+            successMsg.remove();
+        }, 3000);
+        
+        // Reset form
+        contactForm.reset();
+    });
+}
 
 // Animate elements on scroll
 const observerOptions = {
@@ -137,12 +151,10 @@ window.addEventListener('scroll', () => {
 });
 
 // Add loading animation
+document.body.classList.add('loading');
 window.addEventListener('load', () => {
-    document.body.style.opacity = '1';
+    document.body.classList.remove('loading');
 });
-
-document.body.style.opacity = '0';
-document.body.style.transition = 'opacity 0.5s ease';
 
 // Counter animation for stats
 const stats = document.querySelectorAll('.stat h3');
